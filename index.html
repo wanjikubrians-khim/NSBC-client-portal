@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en" style="height: auto; min-height: 100%;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NSBC Client Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+</head>
+<body class="bg-gray-50" style="height: auto; min-height: 100%;" x-data="{ activeSection: 'dashboard', mobileMenuOpen: false, userMenuOpen: false }">
+    <div class="flex h-screen flex-col lg:flex-row">
+        <!-- Sidebar -->
+        <aside class="w-full lg:w-64 bg-white border-b lg:border-b-0 lg:border-r border-gray-200 flex flex-col lg:fixed lg:inset-y-0 lg:left-0 lg:h-screen" :class="{ 'fixed inset-y-0 left-0 z-50 w-64 transform transition-transform duration-300': true, '-translate-x-full lg:translate-x-0': !mobileMenuOpen && window.innerWidth < 1024, 'translate-x-0': mobileMenuOpen || window.innerWidth >= 1024 }">
+            <!-- Close button for mobile -->
+            <button @click="mobileMenuOpen = false" class="lg:hidden absolute top-4 right-4 text-gray-500 hover:text-gray-700 z-10">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+
+            <div class="p-6 border-b border-gray-200">
+                <h1 class="text-2xl font-bold text-blue-600">NSBC</h1>
+                <p class="text-sm text-gray-600 mt-1">Client Portal</p>
+            </div>
+
+            <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
+                <button @click="activeSection = 'dashboard'; mobileMenuOpen = false" :class="activeSection === 'dashboard' ? 'bg-blue-50 text-blue-600' : 'text-gray-700 hover:bg-gray-50'" class="w-full flex items-center px-4 py-3 rounded-lg transition-colors">
+                    <i class="fas fa-home w-5"></i>
+                    <span class="ml-3 font-medium">Dashboard</span>
+                </button>
+
+                <button @click="activeSection = 'inbox'; mobileMenuOpen = false" :class="activeSection === 'inbox' ? 'bg-blue-50 text-blue-600' : 'text-gray-700 hover:bg-gray-50'" class="w-full flex items-center px-4 py-3 rounded-lg transition-colors">
+                    <i class="fas fa-inbox w-5"></i>
+                    <span class="ml-3 font-medium">Inbox</span>
+                    <span class="ml-auto bg-blue-600 text-white text-xs px-2 py-1 rounded-full">3</span>
+                </button>
+
+                <button @click="activeSection = 'documents'; mobileMenuOpen = false" :class="activeSection === 'documents' ? 'bg-blue-50 text-blue-600' : 'text-gray-700 hover:bg-gray-50'" class="w-full flex items-center px-4 py-3 rounded-lg transition-colors">
+                    <i class="fas fa-file-upload w-5"></i>
+                    <span class="ml-3 font-medium">Documents</span>
+                </button>
+
+                <button @click="activeSection = 'reports'; mobileMenuOpen = false" :class="activeSection === 'reports' ? 'bg-blue-50 text-blue-600' : 'text-gray-700 hover:bg-gray-50'" class="w-full flex items-center px-4 py-3 rounded-lg transition-colors">
+                    <i class="fas fa-chart-line w-5"></i>
+                    <span class="ml-3 font-medium">Reports</span>
+                </button>
+
+                <button @click="activeSection = 'notifications'; mobileMenuOpen = false" :class="activeSection === 'notifications' ? 'bg-blue-50 text-blue-600' : 'text-gray-700 hover:bg-gray-50'" class="w-full flex items-center px-4 py-3 rounded-lg transition-colors">
+                    <i class="fas fa-bell w-5"></i>
+                    <span class="ml-3 font-medium">Notifications</span>
+                    <span class="ml-auto bg-red-600 text-white text-xs px-2 py-1 rounded-full">2</span>
+                </button>
+
+                <button @click="activeSection = 'help'; mobileMenuOpen = false" :class="activeSection === 'help' ? 'bg-blue-50 text-blue-600' : 'text-gray-700 hover:bg-gray-50'" class="w-full flex items-center px-4 py-3 rounded-lg transition-colors">
+                    <i class="fas fa-question-circle w-5"></i>
+                    <span class="ml-3 font-medium">Help & Support</span>
+                </button>
+
+                <button @click="activeSection = 'settings'; mobileMenuOpen = false" :class="activeSection === 'settings' ? 'bg-blue-50 text-blue-600' : 'text-gray-700 hover:bg-gray-50'" class="w-full flex items-center px-4 py-3 rounded-lg transition-colors">
+                    <i class="fas fa-cog w-5"></i>
+                    <span class="ml-3 font-medium">Settings</span>
+                </button>
+            </nav>
+
+            <div class="p-4 border-t border-gray-200">
+                <button @click="userMenuOpen = !userMenuOpen" class="w-full flex items-center hover:bg-gray-50 rounded-lg p-2 transition-colors">
+                    <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold flex-shrink-0">
+                        JD
+                    </div>
+                    <div class="ml-3 flex-1 text-left">
+                        <p class="text-sm font-medium text-gray-900">John Doe</p>
+                        <p class="text-xs text-gray-500">john@example.com</p>
+                    </div>
+                    <i class="fas fa-chevron-down text-gray-400 text-xs" :class="{ 'rotate-180': userMenuOpen }"></i>
+                </button>
+                <div x-show="userMenuOpen" x-transition class="mt-2 space-y-1 border-t border-gray-200 pt-2">
+                    <button class="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded transition-colors">
+                        <i class="fas fa-user mr-2"></i>Profile
+                    </button>
+                    <button class="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded transition-colors">
+                        <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main content area -->
+        <main class="flex-1 flex flex-col lg:ml-64">
+        <!-- Header -->
+        <div class="bg-white border-b border-gray-200 px-4 sm:px-6 lg:px-8 py-4">
+            <div class="flex items-center justify-between">
+                <button @click="mobileMenuOpen = !mobileMenuOpen" class="lg:hidden text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+                
+                <!-- Mobile overlay close -->
+                <div x-show="mobileMenuOpen" @click="mobileMenuOpen = false" class="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-40"></div>
+
+                <div class="ml-auto flex items-center space-x-4">
+                    <div class="relative">
+                        <button class="text-gray-500 hover:text-gray-700 relative p-2">
+                            <i class="fas fa-bell text-xl"></i>
+                            <span class="absolute top-0 right-0 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">2</span>
+                        </button>
+                    </div>
+                    <button class="text-gray-500 hover:text-gray-700 p-2">
+                        <i class="fas fa-question-circle text-xl"></i>
+                    </button>
+                    <div class="hidden sm:flex items-center ml-4 pl-4 border-l border-gray-200">
+                        <div class="text-right mr-3">
+                            <p class="text-sm font-medium text-gray-900">John Doe</p>
+                            <p class="text-xs text-gray-500">john@example.com</p>
+                        </div>
+                        <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="flex-1 overflow-auto p-4 sm:p-6 lg:p-8">
+                <!-- Dashboard Section -->
+                <div x-show="activeSection === 'dashboard'" x-transition>
+                    <div class="mb-8">
+                        <h2 class="text-3xl font-bold text-gray-900">Welcome back, John!</h2>
+                        <p class="text-gray-600 mt-1">Here's an overview of your account activity</p>
+                    </div>
+
+                    <!-- Quick Stats -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm text-gray-600">Unread Messages</p>
+                                    <p class="text-3xl font-bold text-gray-900 mt-2">3</p>
+                                </div>
+                                <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-envelope text-blue-600 text-xl"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm text-gray-600">Pending Documents</p>
+                                    <p class="text-3xl font-bold text-gray-900 mt-2">1</p>
+                                </div>
+                                <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-file text-yellow-600 text-xl"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm text-gray-600">New Notifications</p>
+                                    <p class="text-3xl font-bold text-gray-900 mt-2">2</p>
+                                </div>
+                                <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-bell text-red-600 text-xl"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm text-gray-600">Active Reports</p>
+                                    <p class="text-3xl font-bold text-gray-900 mt-2">6</p>
+                                </div>
+                                <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-chart-bar text-green-600 text-xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity -->
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-200">
+                            <div class="p-6 border-b border-gray-200">
+                                <h3 class="text-lg font-semibold text-gray-900">Recent Activity</h3>
+                            </div>
+                            <div class="divide-y divide-gray-200">
+                                <div class="p-6 flex items-start space-x-4">
+                                    <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                        <i class="fas fa-file-upload text-blue-600"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <p class="font-medium text-gray-900">Document uploaded</p>
+                                        <p class="text-sm text-gray-600">Invoice_Summary_Q4.xlsx uploaded</p>
+                                        <p class="text-xs text-gray-500 mt-1">2 hours ago</p>
+                                    </div>
+                                </div>
+                                <div class="p-6 flex items-start space-x-4">
+                                    <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                        <i class="fas fa-message text-purple-600"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <p class="font-medium text-gray-900">New message from Sarah</p>
+                                        <p class="text-sm text-gray-600">Regarding Q4 Tax Documents</p>
+                                        <p class="text-xs text-gray-500 mt-1">5 hours ago</p>
+                                    </div>
+                                </div>
+                                <div class="p-6 flex items-start space-x-4">
+                                    <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                        <i class="fas fa-check-circle text-green-600"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <p class="font-medium text-gray-900">Report generated</p>
+                                        <p class="text-sm text-gray-600">Monthly Financial Report ready for review</p>
+                                        <p class="text-xs text-gray-500 mt-1">1 day ago</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Quick Actions -->
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
+                            <div class="space-y-3">
+                                <button @click="activeSection = 'inbox'; mobileMenuOpen = false" class="w-full text-left px-4 py-3 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors font-medium">
+                                    <i class="fas fa-inbox mr-2"></i>View Messages
+                                </button>
+                                <button @click="activeSection = 'documents'; mobileMenuOpen = false" class="w-full text-left px-4 py-3 bg-gray-50 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors font-medium">
+                                    <i class="fas fa-file-upload mr-2"></i>Upload Documents
+                                </button>
+                                <button @click="activeSection = 'reports'; mobileMenuOpen = false" class="w-full text-left px-4 py-3 bg-gray-50 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors font-medium">
+                                    <i class="fas fa-chart-line mr-2"></i>View Reports
+                                </button>
+                                <button @click="activeSection = 'settings'; mobileMenuOpen = false" class="w-full text-left px-4 py-3 bg-gray-50 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors font-medium">
+                                    <i class="fas fa-cog mr-2"></i>Settings
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div x-show="activeSection === 'inbox'" x-transition>
+                    <div class="mb-6">
+                        <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">Inbox</h2>
+                        <p class="text-gray-600 mt-1">Communicate securely with your accountant</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div class="lg:col-span-1 bg-white rounded-xl shadow-sm border border-gray-200">
+                            <div class="p-4 border-b border-gray-200">
+                                <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors">
+                                    <i class="fas fa-plus mr-2"></i>New Message
+                                </button>
+                            </div>
+                            <div class="divide-y divide-gray-200">
+                                <div class="p-4 hover:bg-gray-50 cursor-pointer border-l-4 border-blue-600 bg-blue-50">
+                                    <div class="flex items-start justify-between mb-2">
+                                        <h4 class="font-semibold text-gray-900">Sarah Johnson</h4>
+                                        <span class="text-xs text-gray-500">2h ago</span>
+                                    </div>
+                                    <p class="text-sm text-gray-600 mb-2">Q4 Tax Documents Required</p>
+                                    <span class="inline-block bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded">Unread</span>
+                                </div>
+                                <div class="p-4 hover:bg-gray-50 cursor-pointer">
+                                    <div class="flex items-start justify-between mb-2">
+                                        <h4 class="font-semibold text-gray-900">Sarah Johnson</h4>
+                                        <span class="text-xs text-gray-500">1d ago</span>
+                                    </div>
+                                    <p class="text-sm text-gray-600">Monthly Report Ready</p>
+                                </div>
+                                <div class="p-4 hover:bg-gray-50 cursor-pointer">
+                                    <div class="flex items-start justify-between mb-2">
+                                        <h4 class="font-semibold text-gray-900">Sarah Johnson</h4>
+                                        <span class="text-xs text-gray-500">3d ago</span>
+                                    </div>
+                                    <p class="text-sm text-gray-600">Invoice Payment Confirmation</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col">
+                            <div class="p-4 sm:p-6 border-b border-gray-200">
+                                <div class="flex items-center">
+                                    <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full flex items-center justify-center text-white font-semibold">
+                                        SJ
+                                    </div>
+                                    <div class="ml-4">
+                                        <h3 class="font-semibold text-gray-900">Sarah Johnson</h3>
+                                        <p class="text-sm text-gray-500">Your Accountant</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex-1 p-4 sm:p-6 space-y-4 overflow-y-auto" style="max-height: 500px;">
+                                <div class="flex items-start">
+                                    <div class="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full flex items-center justify-center text-white text-sm font-semibold flex-shrink-0">
+                                        SJ
+                                    </div>
+                                    <div class="ml-3 bg-gray-100 rounded-lg p-3 max-w-md">
+                                        <p class="text-sm text-gray-900">Hi John, I need you to upload your Q4 expense receipts and bank statements for the tax filing. Please upload them by end of this week.</p>
+                                        <span class="text-xs text-gray-500 mt-1 block">2 hours ago</span>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-start justify-end">
+                                    <div class="mr-3 bg-blue-600 rounded-lg p-3 max-w-md">
+                                        <p class="text-sm text-white">Sure, I'll gather all the documents and upload them by Friday. Do you need anything else?</p>
+                                        <span class="text-xs text-blue-100 mt-1 block">1 hour ago</span>
+                                    </div>
+                                    <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-sm font-semibold flex-shrink-0">
+                                        JD
+                                    </div>
+                                </div>
+
+                                <div class="flex items-start">
+                                    <div class="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full flex items-center justify-center text-white text-sm font-semibold flex-shrink-0">
+                                        SJ
+                                    </div>
+                                    <div class="ml-3 bg-gray-100 rounded-lg p-3 max-w-md">
+                                        <p class="text-sm text-gray-900">That would be perfect! Also, please include any charitable donation receipts if you have them. Thanks!</p>
+                                        <span class="text-xs text-gray-500 mt-1 block">30 minutes ago</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="p-4 sm:p-6 border-t border-gray-200">
+                                <div class="flex items-center space-x-2">
+                                    <button class="text-gray-400 hover:text-gray-600">
+                                        <i class="fas fa-paperclip text-xl"></i>
+                                    </button>
+                                    <input type="text" placeholder="Type your message..." class="flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <button class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-colors">
+                                        <i class="fas fa-paper-plane"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div x-show="activeSection === 'documents'" x-transition>
+                    <div class="mb-6">
+                        <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">Documents</h2>
+                        <p class="text-gray-600 mt-1">Upload and manage your documents</p>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 sm:p-8 mb-6">
+                        <div class="border-2 border-dashed border-gray-300 rounded-xl p-8 sm:p-12 text-center hover:border-blue-500 transition-colors cursor-pointer">
+                            <i class="fas fa-cloud-upload-alt text-5xl text-gray-400 mb-4"></i>
+                            <h3 class="text-lg font-semibold text-gray-900 mb-2">Upload Documents</h3>
+                            <p class="text-gray-600 mb-4">Drag and drop files here or click to browse</p>
+                            <button class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors">
+                                Select Files
+                            </button>
+                            <p class="text-xs text-gray-500 mt-4">Supported formats: PDF, JPG, PNG, DOC, XLS (Max 10MB)</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+                        <div class="p-4 sm:p-6 border-b border-gray-200">
+                            <h3 class="text-lg font-semibold text-gray-900">Upload History</h3>
+                        </div>
+                        <div class="divide-y divide-gray-200">
+                            <div class="p-4 sm:p-6 hover:bg-gray-50">
+                                <div class="flex items-center justify-between flex-wrap gap-4">
+                                    <div class="flex items-center flex-1 min-w-0">
+                                        <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                            <i class="fas fa-file-pdf text-red-600 text-xl"></i>
+                                        </div>
+                                        <div class="ml-4 flex-1 min-w-0">
+                                            <h4 class="font-semibold text-gray-900 truncate">Q4_Expense_Receipts.pdf</h4>
+                                            <p class="text-sm text-gray-500">Uploaded on Dec 15, 2024 • 2.4 MB</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <span class="inline-block bg-green-100 text-green-700 text-xs px-3 py-1 rounded-full">Verified</span>
+                                        <button class="text-gray-400 hover:text-gray-600">
+                                            <i class="fas fa-download"></i>
+                                        </button>
+                                        <button class="text-gray-400 hover:text-red-600">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="p-4 sm:p-6 hover:bg-gray-50">
+                                <div class="flex items-center justify-between flex-wrap gap-4">
+                                    <div class="flex items-center flex-1 min-w-0">
+                                        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                            <i class="fas fa-file-alt text-blue-600 text-xl"></i>
+                                        </div>
+                                        <div class="ml-4 flex-1 min-w-0">
+                                            <h4 class="font-semibold text-gray-900 truncate">Bank_Statement_Nov_2024.pdf</h4>
+                                            <p class="text-sm text-gray-500">Uploaded on Dec 10, 2024 • 1.8 MB</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <span class="inline-block bg-green-100 text-green-700 text-xs px-3 py-1 rounded-full">Verified</span>
+                                        <button class="text-gray-400 hover:text-gray-600">
+                                            <i class="fas fa-download"></i>
+                                        </button>
+                                        <button class="text-gray-400 hover:text-red-600">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="p-4 sm:p-6 hover:bg-gray-50">
+                                <div class="flex items-center justify-between flex-wrap gap-4">
+                                    <div class="flex items-center flex-1 min-w-0">
+                                        <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                            <i class="fas fa-file-excel text-green-600 text-xl"></i>
+                                        </div>
+                                        <div class="ml-4 flex-1 min-w-0">
+                                            <h4 class="font-semibold text-gray-900 truncate">Invoice_Summary_Q4.xlsx</h4>
+                                            <p class="text-sm text-gray-500">Uploaded on Dec 5, 2024 • 856 KB</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <span class="inline-block bg-yellow-100 text-yellow-700 text-xs px-3 py-1 rounded-full">Pending Review</span>
+                                        <button class="text-gray-400 hover:text-gray-600">
+                                            <i class="fas fa-download"></i>
+                                        </button>
+                                        <button class="text-gray-400 hover:text-red-600">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div x-show="activeSection === 'reports'" x-transition>
+                    <div class="mb-6">
+                        <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">Reports</h2>
+                        <p class="text-gray-600 mt-1">View reports sent by your accountant</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg transition-shadow">
+                            <div class="p-6">
+                                <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+                                    <i class="fas fa-chart-bar text-blue-600 text-xl"></i>
+                                </div>
+                                <h3 class="text-lg font-semibold text-gray-900 mb-2">Monthly Financial Report</h3>
+                                <p class="text-sm text-gray-600 mb-4">November 2024 financial summary and analysis</p>
+                                <div class="flex items-center justify-between text-sm text-gray-500 mb-4">
+                                    <span><i class="far fa-calendar mr-2"></i>Dec 1, 2024</span>
+                                    <span><i class="far fa-file-pdf mr-2"></i>PDF</span>
+                                </div>
+                                <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors">
+                                    <i class="fas fa-eye mr-2"></i>View Report
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg transition-shadow">
+                            <div class="p-6">
+                                <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
+                                    <i class="fas fa-file-invoice-dollar text-green-600 text-xl"></i>
+                                </div>
+                                <h3 class="text-lg font-semibold text-gray-900 mb-2">Tax Summary Report</h3>
+                                <p class="text-sm text-gray-600 mb-4">Q4 2024 tax obligations and deductions</p>
+                                <div class="flex items-center justify-between text-sm text-gray-500 mb-4">
+                                    <span><i class="far fa-calendar mr-2"></i>Nov 28, 2024</span>
+                                    <span><i class="far fa-file-pdf mr-2"></i>PDF</span>
+                                </div>
+                                <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors">
+                                    <i class="fas fa-eye mr-2"></i>View Report
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg transition-shadow">
+                            <div class="p-6">
+                                <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
+                                    <i class="fas fa-chart-line text-purple-600 text-xl"></i>
+                                </div>
+                                <h3 class="text-lg font-semibold text-gray-900 mb-2">Quarterly Performance</h3>
+                                <p class="text-sm text-gray-600 mb-4">Q4 2024 business performance metrics</p>
+                                <div class="flex items-center justify-between text-sm text-gray-500 mb-4">
+                                    <span><i class="far fa-calendar mr-2"></i>Nov 15, 2024</span>
+                                    <span><i class="far fa-file-pdf mr-2"></i>PDF</span>
+                                </div>
+                                <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors">
+                                    <i class="fas fa-eye mr-2"></i>View Report
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg transition-shadow">
+                            <div class="p-6">
+                                <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mb-4">
+                                    <i class="fas fa-wallet text-orange-600 text-xl"></i>
+                                </div>
+                                <h3 class="text-lg font-semibold text-gray-900 mb-2">Expense Analysis</h3>
+                                <p class="text-sm text-gray-600 mb-4">October 2024 expense breakdown and insights</p>
+                                <div class="flex items-center justify-between text-sm text-gray-500 mb-4">
+                                    <span><i class="far fa-calendar mr-2"></i>Nov 5, 2024</span>
+                                    <span><i class="far fa-file-pdf mr-2"></i>PDF</span>
+                                </div>
+                                <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors">
+                                    <i class="fas fa-eye mr-2"></i>View Report
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg transition-shadow">
+                            <div class="p-6">
+                                <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mb-4">
+                                    <i class="fas fa-balance-scale text-red-600 text-xl"></i>
+                                </div>
+                                <h3 class="text-lg font-semibold text-gray-900 mb-2">Balance Sheet</h3>
+                                <p class="text-sm text-gray-600 mb-4">September 2024 assets and liabilities</p>
+                                <div class="flex items-center justify-between text-sm text-gray-500 mb-4">
+                                    <span><i class="far fa-calendar mr-2"></i>Oct 10, 2024</span>
+                                    <span><i class="far fa-file-pdf mr-2"></i>PDF</span>
+                                </div>
+                                <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors">
+                                    <i class="fas fa-eye mr-2"></i>View Report
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg transition-shadow">
+                            <div class="p-6">
+                                <div class="w-12 h-12 bg-teal-100 rounded-lg flex items-center justify-center mb-4">
+                                    <i class="fas fa-money-check-alt text-teal-600 text-xl"></i>
+                                </div>
+                                <h3 class="text-lg font-semibold text-gray-900 mb-2">Cash Flow Statement</h3>
+                                <p class="text-sm text-gray-600 mb-4">August 2024 cash flow analysis</p>
+                                <div class="flex items-center justify-between text-sm text-gray-500 mb-4">
+                                    <span><i class="far fa-calendar mr-2"></i>Sep 15, 2024</span>
+                                    <span><i class="far fa-file-pdf mr-2"></i>PDF</span>
+                                </div>
+                                <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors">
+                                    <i class="fas fa-eye mr-2"></i>View Report
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div x-show="activeSection === 'settings'" x-transition>
+                    <div class="mb-6">
+                        <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">Settings</h2>
+                        <p class="text-gray-600 mt-1">Manage your profile and billing information</p>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 sm:p-8">
+                            <h3 class="text-xl font-semibold text-gray-900 mb-6">Profile Information</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                                    <input type="text" value="John Doe" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                                    <input type="email" value="john@example.com" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+                                    <input type="tel" value="+1 (555) 123-4567" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Company Name</label>
+                                    <input type="text" value="Acme Corporation" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                </div>
+                            </div>
+                            <div class="mt-6">
+                                <button class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors">
+                                    Save Changes
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 sm:p-8">
+                            <h3 class="text-xl font-semibold text-gray-900 mb-6">Billing & Payments</h3>
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                                    <div>
+                                        <h4 class="font-semibold text-gray-900">Current Plan</h4>
+                                        <p class="text-sm text-gray-600">Professional - $29/month</p>
+                                    </div>
+                                    <button class="text-blue-600 hover:text-blue-700 font-semibold">
+                                        Upgrade Plan
+                                    </button>
+                                </div>
+                                <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                                    <div>
+                                        <h4 class="font-semibold text-gray-900">Payment Method</h4>
+                                        <p class="text-sm text-gray-600">Visa ending in 4242</p>
+                                    </div>
+                                    <button class="text-blue-600 hover:text-blue-700 font-semibold">
+                                        Update
+                                    </button>
+                                </div>
+                                <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                                    <div>
+                                        <h4 class="font-semibold text-gray-900">Next Billing Date</h4>
+                                        <p class="text-sm text-gray-600">January 15, 2025</p>
+                                    </div>
+                                    <span class="text-sm text-gray-500">$29.00</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 sm:p-8">
+                            <h3 class="text-xl font-semibold text-gray-900 mb-6">Invoices & Receipts</h3>
+                            <div class="space-y-3">
+                                <div class="flex items-center justify-between p-4 hover:bg-gray-50 rounded-lg border border-gray-200">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-file-invoice text-gray-400 text-xl mr-4"></i>
+                                        <div>
+                                            <h4 class="font-semibold text-gray-900">Invoice #1234</h4>
+                                            <p class="text-sm text-gray-600">December 15, 2024 - $29.00</p>
+                                        </div>
+                                    </div>
+                                    <button class="text-blue-600 hover:text-blue-700">
+                                        <i class="fas fa-download mr-2"></i>Download
+                                    </button>
+                                </div>
+                                <div class="flex items-center justify-between p-4 hover:bg-gray-50 rounded-lg border border-gray-200">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-file-invoice text-gray-400 text-xl mr-4"></i>
+                                        <div>
+                                            <h4 class="font-semibold text-gray-900">Invoice #1233</h4>
+                                            <p class="text-sm text-gray-600">November 15, 2024 - $29.00</p>
+                                        </div>
+                                    </div>
+                                    <button class="text-blue-600 hover:text-blue-700">
+                                        <i class="fas fa-download mr-2"></i>Download
+                                    </button>
+                                </div>
+                                <div class="flex items-center justify-between p-4 hover:bg-gray-50 rounded-lg border border-gray-200">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-file-invoice text-gray-400 text-xl mr-4"></i>
+                                        <div>
+                                            <h4 class="font-semibold text-gray-900">Invoice #1232</h4>
+                                            <p class="text-sm text-gray-600">October 15, 2024 - $29.00</p>
+                                        </div>
+                                    </div>
+                                    <button class="text-blue-600 hover:text-blue-700">
+                                        <i class="fas fa-download mr-2"></i>Download
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 sm:p-8">
+                            <h3 class="text-xl font-semibold text-gray-900 mb-6">Security</h3>
+                            <div class="space-y-4">
+                                <button class="w-full sm:w-auto bg-gray-900 hover:bg-gray-800 text-white font-semibold py-2 px-6 rounded-lg transition-colors">
+                                    Change Password
+                                </button>
+                                <button class="w-full sm:w-auto ml-0 sm:ml-3 border border-gray-300 hover:bg-gray-50 text-gray-700 font-semibold py-2 px-6 rounded-lg transition-colors">
+                                    Enable Two-Factor Auth
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notifications Section -->
+                <div x-show="activeSection === 'notifications'" x-transition>
+                    <div class="mb-6">
+                        <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">Notifications</h2>
+                        <p class="text-gray-600 mt-1">Stay updated with important account activity</p>
+                    </div>
+
+                    <div class="space-y-4">
+                        <!-- Important notification -->
+                        <div class="bg-red-50 border border-red-200 rounded-xl p-4 sm:p-6">
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0">
+                                    <i class="fas fa-exclamation-circle text-red-600 text-xl"></i>
+                                </div>
+                                <div class="ml-4 flex-1">
+                                    <h3 class="text-lg font-semibold text-red-900">Urgent: Documents Required</h3>
+                                    <p class="text-red-800 mt-1">Your Q4 expense receipts are needed by December 20th for tax filing.</p>
+                                    <div class="mt-4 flex items-center space-x-3">
+                                        <button @click="activeSection = 'documents'; mobileMenuOpen = false" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-colors">
+                                            Upload Now
+                                        </button>
+                                        <button class="px-4 py-2 border border-red-300 text-red-700 hover:bg-red-100 rounded-lg font-medium transition-colors">
+                                            Dismiss
+                                        </button>
+                                    </div>
+                                </div>
+                                <span class="text-xs text-red-600 font-semibold ml-4">2 days ago</span>
+                            </div>
+                        </div>
+
+                        <!-- Info notification -->
+                        <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 sm:p-6">
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0">
+                                    <i class="fas fa-info-circle text-blue-600 text-xl"></i>
+                                </div>
+                                <div class="ml-4 flex-1">
+                                    <h3 class="text-lg font-semibold text-blue-900">New Report Available</h3>
+                                    <p class="text-blue-800 mt-1">Your November 2024 Monthly Financial Report has been generated and is ready for review.</p>
+                                    <div class="mt-4">
+                                        <button @click="activeSection = 'reports'; mobileMenuOpen = false" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors">
+                                            View Report
+                                        </button>
+                                    </div>
+                                </div>
+                                <span class="text-xs text-blue-600 font-semibold ml-4">1 day ago</span>
+                            </div>
+                        </div>
+
+                        <!-- Success notification -->
+                        <div class="bg-green-50 border border-green-200 rounded-xl p-4 sm:p-6">
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0">
+                                    <i class="fas fa-check-circle text-green-600 text-xl"></i>
+                                </div>
+                                <div class="ml-4 flex-1">
+                                    <h3 class="text-lg font-semibold text-green-900">Document Verified</h3>
+                                    <p class="text-green-800 mt-1">Q4_Expense_Receipts.pdf has been verified and approved by your accountant.</p>
+                                </div>
+                                <span class="text-xs text-green-600 font-semibold ml-4">3 days ago</span>
+                            </div>
+                        </div>
+
+                        <!-- Message notification -->
+                        <div class="bg-white border border-gray-200 rounded-xl p-4 sm:p-6 hover:shadow-md transition-shadow">
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0">
+                                    <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+                                        SJ
+                                    </div>
+                                </div>
+                                <div class="ml-4 flex-1">
+                                    <h3 class="text-lg font-semibold text-gray-900">Message from Sarah Johnson</h3>
+                                    <p class="text-gray-700 mt-1">"Hi John, I've reviewed your documents. Please let me know if you have any questions about the tax implications."</p>
+                                    <div class="mt-4">
+                                        <button @click="activeSection = 'inbox'; mobileMenuOpen = false" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium transition-colors">
+                                            Reply
+                                        </button>
+                                    </div>
+                                </div>
+                                <span class="text-xs text-gray-600 font-semibold ml-4">4 days ago</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Help & Support Section -->
+                <div x-show="activeSection === 'help'" x-transition>
+                    <div class="mb-8">
+                        <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">Help & Support</h2>
+                        <p class="text-gray-600 mt-1">Find answers and get help with your account</p>
+                    </div>
+
+                    <!-- Search -->
+                    <div class="mb-8">
+                        <div class="relative">
+                            <input type="text" placeholder="Search help articles..." class="w-full border border-gray-300 rounded-lg px-4 py-3 pl-12 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                        <!-- FAQ Section -->
+                        <div class="md:col-span-2 bg-white rounded-xl shadow-sm border border-gray-200">
+                            <div class="p-6 border-b border-gray-200">
+                                <h3 class="text-xl font-semibold text-gray-900">Frequently Asked Questions</h3>
+                            </div>
+                            <div class="divide-y divide-gray-200">
+                                <div class="p-6 hover:bg-gray-50 cursor-pointer transition-colors">
+                                    <div class="flex items-center justify-between">
+                                        <h4 class="font-semibold text-gray-900">How do I upload documents?</h4>
+                                        <i class="fas fa-chevron-right text-gray-400"></i>
+                                    </div>
+                                    <p class="text-sm text-gray-600 mt-2">Navigate to the Documents section and use the upload area to select files from your computer...</p>
+                                </div>
+                                <div class="p-6 hover:bg-gray-50 cursor-pointer transition-colors">
+                                    <div class="flex items-center justify-between">
+                                        <h4 class="font-semibold text-gray-900">What file formats are supported?</h4>
+                                        <i class="fas fa-chevron-right text-gray-400"></i>
+                                    </div>
+                                    <p class="text-sm text-gray-600 mt-2">We support PDF, JPG, PNG, DOC, and XLS files up to 10MB each...</p>
+                                </div>
+                                <div class="p-6 hover:bg-gray-50 cursor-pointer transition-colors">
+                                    <div class="flex items-center justify-between">
+                                        <h4 class="font-semibold text-gray-900">How can I contact my accountant?</h4>
+                                        <i class="fas fa-chevron-right text-gray-400"></i>
+                                    </div>
+                                    <p class="text-sm text-gray-600 mt-2">Use the Inbox section to send secure messages directly to your accountant...</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Contact Support -->
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                            <h3 class="text-xl font-semibold text-gray-900 mb-4">Contact Support</h3>
+                            <div class="space-y-4">
+                                <a href="mailto:support@nsbc.com" class="flex items-center p-4 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors">
+                                    <i class="fas fa-envelope text-blue-600 text-xl w-6"></i>
+                                    <div class="ml-4">
+                                        <p class="font-medium text-gray-900">Email Support</p>
+                                        <p class="text-sm text-gray-600">support@nsbc.com</p>
+                                    </div>
+                                </a>
+                                <a href="tel:+1555123456" class="flex items-center p-4 bg-green-50 hover:bg-green-100 rounded-lg transition-colors">
+                                    <i class="fas fa-phone text-green-600 text-xl w-6"></i>
+                                    <div class="ml-4">
+                                        <p class="font-medium text-gray-900">Phone Support</p>
+                                        <p class="text-sm text-gray-600">+1 (555) 123-4567</p>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Resources -->
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                            <h3 class="text-xl font-semibold text-gray-900 mb-4">Resources</h3>
+                            <div class="space-y-3">
+                                <a href="#" class="flex items-center text-blue-600 hover:text-blue-700 font-medium">
+                                    <i class="fas fa-file-pdf mr-2"></i>User Guide
+                                </a>
+                                <a href="#" class="flex items-center text-blue-600 hover:text-blue-700 font-medium">
+                                    <i class="fas fa-video mr-2"></i>Video Tutorials
+                                </a>
+                                <a href="#" class="flex items-center text-blue-600 hover:text-blue-700 font-medium">
+                                    <i class="fas fa-question-circle mr-2"></i>Knowledge Base
+                                </a>
+                                <a href="#" class="flex items-center text-blue-600 hover:text-blue-700 font-medium">
+                                    <i class="fas fa-comments mr-2"></i>Community Forum
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
